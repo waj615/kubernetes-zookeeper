@@ -1,0 +1,26 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - go get github.com/samuel/go-zookeeper/zk
+    - go build zk-test.go
+
+  override:
+    - docker build -t quay.io/rainchasers/zookeeper .
+    - docker run --name=zk1 -e "MYID=1" -p 2888:2888 quay.io/rainchasers/zookeeper:
+        background: true
+    - sleep 15
+
+test:
+  override:
+    - "[[ $(echo ruok | nc 127.0.0.1 2888) = 'imok' ]]"
+    - echo stat | nc 127.0.0.1 2888
+
+deployment:
+  hub: 
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PWD $DOCKER_URL
+      - docker push quay.io/rainchasers/zookeeper

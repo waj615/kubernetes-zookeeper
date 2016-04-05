@@ -9,7 +9,7 @@ dependencies:
 
   override:
     - docker build -t quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM .
-    - docker run --name=zk1 -e "MYID=1" -p 2181:2001 quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk1 -e "MYID=1" -p 2001:2181 quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
 

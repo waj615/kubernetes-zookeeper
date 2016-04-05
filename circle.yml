@@ -9,14 +9,14 @@ dependencies:
 
   override:
     - docker build -t quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM .
-    - docker run --name=zk1 -e "MYID=1" -p 2888:2888 quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk1 -e "MYID=1" -p 2181:2001 quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
 
 test:
   override:
-    - "[[ $(echo ruok | nc 127.0.0.1 2181) = 'imok' ]]"
-    - echo stat | nc 127.0.0.1 2181
+    - "[[ $(echo ruok | nc 127.0.0.1 2001) = 'imok' ]]"
+    - echo stat | nc 127.0.0.1 2001
 
 deployment:
   hub: 

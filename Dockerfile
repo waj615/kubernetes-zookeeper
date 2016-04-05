@@ -13,12 +13,7 @@ RUN apk add --no-cache bash \
 COPY zoo.cfg /opt/zookeeper/conf/zoo.cfg
 COPY log4j.properties /opt/zookeeper/conf/log4j.properties
 
-ENV PATH=/opt/zookeeper/bin:${PATH} \
-    ZOO_LOG_DIR=/opt/zookeeper/log \
-    ZOO_LOG4J_PROP="INFO, CONSOLE, ROLLINGFILE" \
-    JMXPORT=9010
-
-EXPOSE 2181 2888 3888 9010
+EXPOSE 2181 2888 3888
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "zkServer.sh", "start-foreground" ]
+CMD [ "/opt/zookeeper/bin/zkServer.sh", "start-foreground" ]

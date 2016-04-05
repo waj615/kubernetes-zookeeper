@@ -23,7 +23,7 @@ spec:
             - name: MYID
               value: "2"
             - name: SERVERS
-              value: "zookeeper-1,zookeeper-2,zookeeper-3"
+              value: "zookeeper-1:2888:3888,zookeeper-2:2888:3888,zookeeper-3:2888:3888"
             - name: JVMFLAGS
               value: "-Xmx2G"
           ports:

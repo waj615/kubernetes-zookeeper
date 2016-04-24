@@ -18,12 +18,10 @@ spec:
             medium: Memory
       containers:
         - name: server
-          image: quay.io/rainchasers/zookeeper:latest
+          image: quay.io/rainchasers/zookeeper:v10
           env:
             - name: MYID
               value: "1"
-            - name: SERVERS
-              value: "zookeeper-1:2888:3888,zookeeper-2:2888:3888,zookeeper-3:2888:3888"
             - name: JVMFLAGS
               value: "-Xmx2G"
           ports:

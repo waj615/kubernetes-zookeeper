@@ -15,5 +15,23 @@ do
 	fi
 done
 
+if [ "$MYID" == "monitor" ]; then
+	while :
+	do
+		for i in 1 2 3 4 5
+		do
+			host="ZOOKEEPER_${i}_SERVICE_HOST"
+			port="ZOOKEEPER_${i}_SERVICE_PORT_CLIENT"
+			if [ -n "${!host}" ]; then
+				mntr=$(echo mntr | nc "${!host}" "${!port}" | tr ',:' '  ' | tr '\n' ',' | tr '\t' ':')
+				mntr=${mntr//:/:\"}
+				mntr=${mntr//,/\",\"}
+				printf "{${mntr}service:\"zookeeper\",myid:\"${i}\"}\n"
+				sleep 20
+			fi
+		done
+	done
+fi
+
 cd /opt/zookeeper
 exec "$@"

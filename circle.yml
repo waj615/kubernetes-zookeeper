@@ -15,6 +15,8 @@ dependencies:
         background: true
     - docker run --name=zk3 -e "MYID=3" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
+    - docker run --name=zkmon -e "MYID=monitor" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+        background: true
     - sleep 15
 
 test:

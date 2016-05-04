@@ -2,18 +2,8 @@
 
 echo ${MYID:-1} > /opt/zookeeper/data/myid
 
-# SERVERS and CLIENT_PORT inputs exist for test and other uses outside kubernetes of this container. 
-
-if [ -n "$SERVERS" ]; then
-	IFS=\, read -a servers <<<"$SERVERS"
-	for i in "${!servers[@]}"; do 
-		printf "\nserver.%i=%s" "$((1 + $i))" "${servers[$i]}" >> /opt/zookeeper/conf/zoo.cfg
-	done
-fi
-
-printf "\nclientPort=%i" "${CLIENT_PORT:-2181}" >> /opt/zookeeper/conf/zoo.cfg
-
-# Within kubernetes, we rely on the service environment variables.
+client="ZOOKEEPER_${MYID}_SERVICE_PORT_CLIENT"
+printf "\nclientPort=%i" "${!client:-2181}" >> /opt/zookeeper/conf/zoo.cfg
 
 for i in 1 2 3
 do

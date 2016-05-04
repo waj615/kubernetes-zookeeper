@@ -9,11 +9,11 @@ dependencies:
 
   override:
     - docker build -t quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM .
-    - docker run --name=zk1 -e "MYID=1" -e "CLIENT_PORT=12181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk1 -e "MYID=1" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
-    - docker run --name=zk2 -e "MYID=2" -e "CLIENT_PORT=22181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk2 -e "MYID=2" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
-    - docker run --name=zk3 -e "MYID=3" -e "CLIENT_PORT=32181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk3 -e "MYID=3" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
 
@@ -29,17 +29,17 @@ test:
     # set basic data and check integrity through a rolling restart
     - ./zk-test -servers="127.0.0.1:12181,127.0.0.1:22181,127.0.0.1:32181" -namespace="failover" -actions="create,isCreated"
     - docker stop zk1
-    - docker run --name=zk1next -e "MYID=1" -e "CLIENT_PORT=12181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk1next -e "MYID=1" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
     - echo stat | nc 127.0.0.1 12181 && echo stat | nc 127.0.0.1 22181 && echo stat | nc 127.0.0.1 32181
     - docker stop zk2
-    - docker run --name=zk2next -e "MYID=2" -e "CLIENT_PORT=22181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk2next -e "MYID=2" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
     - echo stat | nc 127.0.0.1 12181 && echo stat | nc 127.0.0.1 22181 && echo stat | nc 127.0.0.1 32181
     - docker stop zk3
-    - docker run --name=zk3next -e "MYID=3" -e "CLIENT_PORT=32181" -e "SERVERS=127.0.0.1:12888:13888,127.0.0.1:22888:23888,127.0.0.1:32888:33888" --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
+    - docker run --name=zk3next -e "MYID=3" --env-file ./circle.env --net=host quay.io/rainchasers/zookeeper:v$CIRCLE_BUILD_NUM:
         background: true
     - sleep 15
     - echo stat | nc 127.0.0.1 12181 && echo stat | nc 127.0.0.1 22181 && echo stat | nc 127.0.0.1 32181

@@ -5,7 +5,7 @@ echo ${MYID:-1} > /opt/zookeeper/data/myid
 client="ZOOKEEPER_${MYID}_SERVICE_PORT_CLIENT"
 printf "\nclientPort=%i" "${!client:-2181}" >> /opt/zookeeper/conf/zoo.cfg
 
-for i in 1 2 3
+for i in 1 2 3 4 5
 do
 	host="ZOOKEEPER_${i}_SERVICE_HOST"
 	followers="ZOOKEEPER_${i}_SERVICE_PORT_FOLLOWERS"

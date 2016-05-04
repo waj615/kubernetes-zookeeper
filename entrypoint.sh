@@ -9,9 +9,9 @@ if [ "$MYID" == "monitor" ]; then
 			port="ZOOKEEPER_${i}_SERVICE_PORT_CLIENT"
 			if [ -n "${!host}" ]; then
 				mntr=$(echo mntr | nc "${!host}" "${!port}" | tr ',:' '  ' | tr '\n' ',' | tr '\t' ':')
-				mntr=${mntr//:/:\"}
-				mntr=${mntr//,/\",}
-				printf "{${mntr}service:\"zookeeper\",myid:\"${i}\"}\n"
+				mntr=${mntr//:/\":\"}
+				mntr=${mntr//,/\",\"}
+				printf "{\"${mntr}service\":\"zookeeper\",\"myid\":\"${i}\"}\n"
 				sleep 20
 			fi
 		done

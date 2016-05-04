@@ -25,7 +25,7 @@ if [ "$MYID" == "monitor" ]; then
 			if [ -n "${!host}" ]; then
 				mntr=$(echo mntr | nc "${!host}" "${!port}" | tr ',:' '  ' | tr '\n' ',' | tr '\t' ':')
 				mntr=${mntr//:/:\"}
-				mntr=${mntr//,/\",\"}
+				mntr=${mntr//,/\",}
 				printf "{${mntr}service:\"zookeeper\",myid:\"${i}\"}\n"
 				sleep 20
 			fi

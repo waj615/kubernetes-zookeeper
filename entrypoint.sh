@@ -9,8 +9,14 @@ if [ "$MYID" == "monitor" ]; then
 			port="ZOOKEEPER_${i}_SERVICE_PORT_CLIENT"
 			if [ -n "${!host}" ]; then
 				mntr=$(echo mntr | nc "${!host}" "${!port}" | tr ',:' '  ' | tr '\n' ',' | tr '\t' ':')
+
+				# quote everything (fieldnames & values)
 				mntr=${mntr//:/\":\"}
 				mntr=${mntr//,/\",\"}
+
+				# unquote integer fields (for correct log processing)
+				mntr=$(echo $mntr | sed 's/\"\([0-9][0-9]*\)\"/\1/g')
+
 				printf "{\"${mntr}service\":\"zookeeper\",\"myid\":\"${i}\"}\n"
 				sleep 20
 			fi

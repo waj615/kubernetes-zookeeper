@@ -5,7 +5,9 @@ Zookeeper on Kubernetes
 
 [![Docker Repository on Quay](https://quay.io/repository/rainchasers/zookeeper/status "Docker Repository on Quay")](https://quay.io/repository/rainchasers/zookeeper)
 
-Zookeeper v3.4.8 docker build suitable for Kubernetes deployment. Inspiration from [eliaslevy/docker-zookeeper](https://github.com/eliaslevy/docker-zookeeper) and [jplock/docker-zookeeper](https://github.com/jplock/docker-zookeeper).
+Zookeeper v3.4.8 docker build suitable for Kubernetes deployment. Inspiration from [eliaslevy/docker-zookeeper](https://github.com/eliaslevy/docker-zookeeper) and [jplock/docker-zookeeper](https://github.com/jplock/docker-zookeeper). Used at modest scale in a non-critical production system to support [Rainchasers](http://rainchasers.com/).
+
+**If you're after a battle-hardened proven large-scale production system I'd recommend [Exhibitor](https://github.com/Netflix/exhibitor/wiki) from Netflix instead, see [here for a quick intro to it's usage on GCE](https://cloudplatform.googleblog.com/2016/04/taming-the-herd-using-Zookeeper-and-Exhibitor-on-Google-Container-Engine.html).**
 
 To create a reliable 3 node cluster...
 
@@ -90,8 +92,6 @@ ZOOKEEPER_SERVICE_PORT_CLIENT=2181
 $ echo ruok | kubectl exec -i busybox nc 10.147.252.54 2181
 imok
 $ echo stat | kubectl exec -i busybox nc 10.147.252.54 2181
-imok
-$ echo stat | kubectl exec -i busybox nc 10.147.252.54 2181
 Zookeeper version: 3.4.8--1, built on 02/06/2016 03:18 GMT
 Clients:
  /10.144.1.1:53748[0](queued=0,recved=1,sent=0)
@@ -105,3 +105,14 @@ Zxid: 0x0
 Mode: follower
 Node count: 4
 ```
+
+Monitoring the Zookeeper Cluster
+--------------------------------
+
+The same Docker container can be placed into monitoring mode using a `MYID` environment variable value of `monitor`. To launch on kubernetes: 
+
+```
+kubectl create -f kubernetes/zookeeper-monitor-rc.yml
+```
+
+This will log the output of the `mntr` command to each deployed node in your Zookeeper cluster as a formtaed JSON string that can be parsed and monitored by whatever your downstream log aggregation solution is.

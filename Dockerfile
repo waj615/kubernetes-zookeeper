@@ -1,7 +1,9 @@
 FROM java:openjdk-8-jre-alpine
 
 LABEL name="zookeeper" version="3.4.8"
+ENV TZ=Asia/Shanghai
 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY entrypoint.sh /entrypoint.sh
 ADD zookeeper-3.4.8.tar.gz /opt
 

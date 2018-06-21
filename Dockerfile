@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre-alpine
+FROM java:8
 
 LABEL name="zookeeper" version="3.4.8"
 ENV TZ=Asia/Shanghai

@@ -18,7 +18,7 @@ spec:
             medium: Memory
       containers:
         - name: server
-          image: quay.io/rainchasers/zookeeper:v10
+          image: waj615/zookeeper:3.4.8
           env:
             - name: MYID
               value: "2"

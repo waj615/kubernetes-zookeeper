@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: quay.io/rainchasers/zookeeper:v18
+          image: waj615/zookeeper:3.4.8
           env:
             - name: MYID
               value: "monitor"

@@ -7,8 +7,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY entrypoint.sh /entrypoint.sh
 ADD zookeeper-3.4.8.tar.gz /opt
 
-RUN apk add --no-cache bash \
-    && chmod +x /entrypoint.sh \
+RUN  chmod +x /entrypoint.sh \
     && mv /opt/zookeeper-3.4.8 /opt/zookeeper \
     && mkdir -p /opt/zookeeper/conf /opt/zookeeper/data /opt/zookeeper/wal /opt/zookeeper/log
 
